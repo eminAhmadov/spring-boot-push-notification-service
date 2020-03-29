@@ -86,4 +86,36 @@ public class PushNotification {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getTravelerName() {
+        return travelerName;
+    }
+
+    public void setTravelerName(String travelerName) {
+        this.travelerName = travelerName;
+    }
+
+    public String getTravelOrigin() {
+        return travelOrigin;
+    }
+
+    public void setTravelOrigin(String travelOrigin) {
+        this.travelOrigin = travelOrigin;
+    }
+
+    public String getTravelDestination() {
+        return travelDestination;
+    }
+
+    public void setTravelDestination(String travelDestination) {
+        this.travelDestination = travelDestination;
+    }
+
+    public Date getTravelDate() {
+        return travelDate;
+    }
+
+    public void setTravelDate(Date travelDate) {
+        this.travelDate = travelDate;
+    }
 }
