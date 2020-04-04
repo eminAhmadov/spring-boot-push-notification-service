@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,31 +59,31 @@ public class PushNotificationServiceImpl implements PushNotificationService {
         Optional<User> foundUser = usersRepository.findByUserId(userId);
         if (foundUser.isPresent()) {
             // getting properties from JSON
-            String traveler_name = pushNotification.get("traveler_name");
-            String travel_origin = pushNotification.get("travel_origin");
-            String travel_destination = pushNotification.get("travel_destination");
-            String travel_date = pushNotification.get("travel_date");
+            String travelerName = pushNotification.get("travelerName");
+            String travelOrigin = pushNotification.get("travelOrigin");
+            String travelDestination = pushNotification.get("travelDestination");
+            String travelDate = pushNotification.get("travelDate");
             User user = userId == null ? null : userService.getByUserId(userId).orElse(null);
 
             // defining message format EN
             String message =
-                    "{" +
-                            "\"en\": \"{0} is travelling from {1} to {2} on {3}.\",\n" +
-                            "}";
+                    "'{'" +
+                            "\"en\": \"{0} is travelling from {1} to {2} on {3}.\"\n" +
+                            "'}'";
             MessageFormat contentsFormat = new MessageFormat(message);
             Object[] contentsArgs = {
-                    traveler_name,
-                    travel_origin,
-                    travel_destination,
-                    travel_date
+                    travelerName,
+                    travelOrigin,
+                    travelDestination,
+                    travelDate
             };
             String formattedContents = contentsFormat.format(contentsArgs);
             // defining data for push notification
             String data = "{" +
-                    "\"traveler_name\": \"" + traveler_name + "\",\n" +
-                    "\"travel_origin\": \"" + travel_origin + "\",\n" +
-                    "\"travel_destination\": " + travel_destination + ",\n" +
-                    "\"travel_date\": \"" + travel_date + "\"" +
+                    "\"travelerName\": \"" + travelerName + "\",\n" +
+                    "\"travelOrigin\": \"" + travelOrigin + "\",\n" +
+                    "\"travelDestination\": \"" + travelDestination + "\",\n" +
+                    "\"travelDate\": \"" + travelDate + "\"" +
                     "}";
 
             // making OneSignal API call for sending notification
@@ -102,10 +103,11 @@ public class PushNotificationServiceImpl implements PushNotificationService {
             PushNotification pushNotificationToSave = new PushNotification();
             pushNotificationToSave.setPushNotId(pushNotId);
             pushNotificationToSave.setUser(user);
-            pushNotificationToSave.setTravelerName(traveler_name);
-            pushNotificationToSave.setTravelOrigin(travel_origin);
-            pushNotificationToSave.setTravelDestination(travel_destination);
-            pushNotificationToSave.setTravelDate(java.text.DateFormat.getDateInstance().parse(travel_date));
+            pushNotificationToSave.setTravelerName(travelerName);
+            pushNotificationToSave.setTravelOrigin(travelOrigin);
+            pushNotificationToSave.setTravelDestination(travelDestination);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            pushNotificationToSave.setTravelDate(dateFormat.parse(travelDate));
             return pushNotificationRepository.save(pushNotificationToSave);
         }
         return null;
