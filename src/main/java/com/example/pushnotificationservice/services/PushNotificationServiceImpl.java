@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PushNotificationServiceImpl implements PushNotificationService {
@@ -64,8 +67,8 @@ public class PushNotificationServiceImpl implements PushNotificationService {
             // defining message format EN
             String message =
                     "{" +
-                    "\"en\": \"{0} is travelling from {1} to {2} on {3}.\",\n" +
-                    "}";
+                            "\"en\": \"{0} is travelling from {1} to {2} on {3}.\",\n" +
+                            "}";
             MessageFormat contentsFormat = new MessageFormat(message);
             Object[] contentsArgs = {
                     traveler_name,
@@ -85,11 +88,7 @@ public class PushNotificationServiceImpl implements PushNotificationService {
             // making OneSignal API call for sending notification
             String pushNotResponse = null;
             try {
-                if (user == null) {
-                    pushNotResponse = oneSignalService.sendToAll(formattedContents, data);
-                } else {
-                    pushNotResponse = oneSignalService.sendToUserWithUserId(formattedContents, data, user.getUserPushNotId().toString());
-                }
+                pushNotResponse = oneSignalService.sendToUserWithUserId(formattedContents, data, user.getUserPushNotId().toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
