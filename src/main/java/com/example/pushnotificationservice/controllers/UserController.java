@@ -2,9 +2,10 @@ package com.example.pushnotificationservice.controllers;
 
 import com.example.pushnotificationservice.entities.User;
 import com.example.pushnotificationservice.services.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,15 +29,14 @@ public class UserController {
     }
 
     @GetMapping("/find")
-    public User getByUserId(
+    public ResponseEntity<User> getByUserId(
             @RequestParam UUID userId
     ) {
-        return userService.getByUserId(userId).orElse(null);
-    }
-
-    @GetMapping("/getAllUserIds")
-    public List<UUID> getAllUserIds() {
-        return  userService.getAllUserIds();
+        User user = userService.getByUserId(userId).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }

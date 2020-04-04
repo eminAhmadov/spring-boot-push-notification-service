@@ -4,7 +4,6 @@ import com.example.pushnotificationservice.entities.User;
 import com.example.pushnotificationservice.repositories.UsersRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,10 +25,5 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getByUserId(UUID userId) {
         return usersRepository.findById(userId);
-    }
-
-    @Override
-    public List<UUID> getAllUserIds() {
-        return usersRepository.findUserIds();
     }
 }
