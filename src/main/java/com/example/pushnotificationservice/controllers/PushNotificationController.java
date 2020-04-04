@@ -2,6 +2,8 @@ package com.example.pushnotificationservice.controllers;
 
 import com.example.pushnotificationservice.entities.PushNotification;
 import com.example.pushnotificationservice.services.PushNotificationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -40,10 +42,14 @@ public class PushNotificationController {
     }
 
     @PostMapping(path = "/send", consumes = "application/json", produces = "application/json")
-    public PushNotification sendPushNotification(
+    public ResponseEntity<PushNotification> sendPushNotification(
             @RequestParam UUID userId,
             @RequestBody Map<String, String> pushNotification) throws ParseException {
-        return pushNotificationService.createPushNotification(userId, pushNotification);
+        PushNotification createdPushNotification = pushNotificationService.createPushNotification(userId, pushNotification);
+        if (createdPushNotification == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(createdPushNotification, HttpStatus.OK);
     }
 
 }
