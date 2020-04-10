@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @JsonIdentityInfo(
@@ -18,6 +19,12 @@ public class NotificationAlert {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @OrderBy
+    @Column(name = "created_on",
+            nullable = false,
+            updatable = false)
+    private LocalDateTime createdOn = LocalDateTime.now();
 
     @Column(name = "travel_origin", nullable = false)
     private String travelOrigin;
