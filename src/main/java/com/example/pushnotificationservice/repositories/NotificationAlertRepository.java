@@ -17,6 +17,6 @@ public interface NotificationAlertRepository extends PagingAndSortingRepository<
     Page<NotificationAlert> findAll(Pageable pageable);
     Page<NotificationAlert> findByUser_UserId(UUID userId, Pageable pageable);
 
-    @Query("SELECT notificationAlert.user FROM NotificationAlert notificationAlert WHERE notificationAlert.travelOrigin = :travelOrigin AND notificationAlert.travelDestination = :travelDestination AND :travelDate BETWEEN notificationAlert.travelDateFrom AND notificationAlert.travelDateTo")
+    @Query("SELECT DISTINCT notificationAlert.user FROM NotificationAlert notificationAlert WHERE notificationAlert.travelOrigin = :travelOrigin AND notificationAlert.travelDestination = :travelDestination AND :travelDate BETWEEN notificationAlert.travelDateFrom AND notificationAlert.travelDateTo")
     List<User> findUsersWithMatchingAlert(String travelOrigin, String travelDestination, Date travelDate);
 }
