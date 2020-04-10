@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface NotificationAlertService {
     List<NotificationAlert> getAll(int offset, int limit);
     List<NotificationAlert> getAllForUserWithUserId(UUID userId, int offset, int limit);
-    List<PushNotification> triggerMatchingAlerts(String travelerName, String travelOrigin, String travelDestination, Date travelDate) throws ParseException;
+    List<PushNotification> triggerMatchingAlerts(Map<String, String> travelDetails) throws ParseException;
     NotificationAlert createNotificationAlert(UUID userId, Map<String, String> notificationAlert) throws ParseException;
 }

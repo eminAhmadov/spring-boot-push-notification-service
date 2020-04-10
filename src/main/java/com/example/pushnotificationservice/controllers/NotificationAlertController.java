@@ -45,12 +45,9 @@ public class NotificationAlertController {
 
     @PostMapping(path = "/trigger")
     public List<PushNotification> triggerMatchingAlerts(
-            @RequestParam String travelerName,
-            @RequestParam String travelOrigin,
-            @RequestParam String travelDestination,
-            @RequestParam Date travelDate
+            @RequestBody Map<String, String> travelDetails
     ) throws ParseException {
-        return notificationAlertService.triggerMatchingAlerts(travelerName, travelOrigin, travelDestination, travelDate);
+        return notificationAlertService.triggerMatchingAlerts(travelDetails);
     }
 
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")

@@ -46,18 +46,15 @@ public class NotificationAlertServiceImpl implements NotificationAlertService {
     }
 
     @Override
-    public List<PushNotification> triggerMatchingAlerts(String travelerName, String travelOrigin, String travelDestination, Date travelDate) throws ParseException {
+    public List<PushNotification> triggerMatchingAlerts(Map<String, String> travelDetails) throws ParseException {
+        String travelOrigin = travelDetails.get("travelOrigin");
+        String travelDestination = travelDetails.get("travelDestination");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date travelDate = dateFormat.parse(travelDetails.get("travelDate"));
         List<User> foundUsers = notificationAlertRepository.findUsersWithMatchingAlert(travelOrigin, travelDestination, travelDate);
         List<PushNotification> sentNotifications = new ArrayList<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Map<String, String> pushNotificationBody = new HashMap<String, String>() {{
-            put("travelerName", travelerName);
-            put("travelOrigin", travelOrigin);
-            put("travelDestination", travelDestination);
-            put("travelDate", dateFormat.format(travelDate));
-        }};
         for (User user : foundUsers) {
-            PushNotification pushNotification = pushNotificationService.createPushNotification(user.getUserId(), pushNotificationBody);
+            PushNotification pushNotification = pushNotificationService.createPushNotification(user.getUserId(), travelDetails);
             sentNotifications.add(pushNotification);
         }
         return sentNotifications;
