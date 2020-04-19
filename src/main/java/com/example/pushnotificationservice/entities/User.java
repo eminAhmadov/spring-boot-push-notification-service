@@ -8,7 +8,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -23,14 +25,17 @@ public class User {
     @Column(name = "user_id", nullable = false, columnDefinition = "BINARY(36)")
     private UUID userId;
 
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     @Column(name = "user_push_not_id", nullable = false, columnDefinition = "BINARY(36)")
     private UUID userPushNotId;
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<PushNotification> pushNotifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<NotificationAlert> notificationAlerts = new ArrayList<>();
 
     @Column(name = "added_on",
             nullable = false,
@@ -96,6 +101,14 @@ public class User {
 
     public void setPushNotifications(List<PushNotification> pushNotifications) {
         this.pushNotifications = pushNotifications;
+    }
+
+    public List<NotificationAlert> getNotificationAlerts() {
+        return notificationAlerts;
+    }
+
+    public void setNotificationAlerts(List<NotificationAlert> notificationAlerts) {
+        this.notificationAlerts = notificationAlerts;
     }
 
     public LocalDateTime getAddedOn() {
